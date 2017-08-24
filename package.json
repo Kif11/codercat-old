@@ -1,0 +1,14 @@
+{
+  "name": "codercat",
+  "version": "1.0.0",
+  "description": "Coder cat main web site",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Kirill Kovalevskiy",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.15.3"
+  }
+}
