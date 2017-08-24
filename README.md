@@ -10,4 +10,4 @@ npm install
 node main.js
 ```
 
-Creators [Kirill] (https://github.com/kif11) and [Snay] (https://github.com/sneha-belkhale)
+Creators [Kirill](https://github.com/kif11) and [Snay](https://github.com/sneha-belkhale)
