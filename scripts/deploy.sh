@@ -8,5 +8,5 @@ ssh kiko@ubkif <<EOI
   git pull
   npm install
   npm run build
-  pm2 restart subcity
+  pm2 restart codercat
 EOI
