@@ -22,7 +22,7 @@
 			var currentSphere;
 			var previousMousePosition;
 			var autoRotationQuaternion;
-			var index = 0;
+			var index;
 			materials = [];
 			var windowHalfX = window.innerWidth / 2;
 			var windowHalfY = window.innerHeight / 2;
@@ -31,6 +31,20 @@
 			var distance;
       var info;
       var infoCards;
+
+			function getParameterByName(name){
+				url = window.location.href;
+				name = name.replace(/[\[\]]/g, "\\$&");
+				let regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+				results = regex.exec(url);
+
+				if (!results) return null;
+				if (!results[2]) return null;
+				return decodeURIComponent(results[2].replace(/\+/g, " "));
+			}
+
+			index = parseInt(getParameterByName('page'));
+			if (!index) index = 0;
 
 			init();
 			animate();
@@ -75,48 +89,49 @@
 				scene = new THREE.Scene();
 
 				camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 1000 );
+				camera.position.x = index * 300;
 				camera.position.y = 55;
 				camera.position.z = 250;
 
 				imageArray = ['img/photospheres/portrerogarden.jpg', 'img/photospheres/nb.jpg', 'img/photospheres/night.jpg', 'img/photospheres/ship.jpg', 'img/photospheres/duboce2.jpg'];
 
 				infoCards = [
-          `PORTRERO GARDEN 
-          <br>  
-          <a href="http://subcity.tk?lat=37.759844&lng=-122.405364&zoom=16&markers=%5B%7B%22coordinates%22%3A%20%5B-122.405364%2C%2037.759844%5D%2C%22img%22%3A%20%22favicon.png%22%7D%5D" target="_blank"> 37.759844, -122.405364</a> 
-          <br> <br> 
-          A community garden on top of a hill, that is blooming with fruits, vegetables, 
-          and ornamentals. A sign at the entrance mentions that before the garden was 
-          established in 1970, it was home to the "Goat Lady" of Portrero Hill. She used 
+          `PORTRERO GARDEN
+          <br>
+          <a href="http://subcity.tk?lat=37.759844&lng=-122.405364&zoom=16&markers=%5B%7B%22coordinates%22%3A%20%5B-122.405364%2C%2037.759844%5D%2C%22img%22%3A%20%22favicon.png%22%7D%5D" target="_blank"> 37.759844, -122.405364</a>
+          <br> <br>
+          A community garden on top of a hill, that is blooming with fruits, vegetables,
+          and ornamentals. A sign at the entrance mentions that before the garden was
+          established in 1970, it was home to the "Goat Lady" of Portrero Hill. She used
           this vacant land to graze her herd.`,
-				  `NOISEBRIDGE 
-          <br> 
-          <a href="http://subcity.tk?lat=37.762422&lng=-122.419380&zoom=16&markers=%5B%7B%22coordinates%22%3A%20%5B-122.419380%2C%2037.762422%5D%2C%22img%22%3A%20%22favicon.png%22%7D%5D" target="_blank" > 37.762422, -122.419380</a> 
-          <br> <br> 
-          A hackerspace of your dreams, fully stocked with an electronics lab, wood shop, 
-          craft supplies, libNoiseBridge, and creative collaboration. This space is constantly 
-          evolving due to its doocratic philosophy, and will definitely feul your inner 
+				  `NOISEBRIDGE
+          <br>
+          <a href="http://subcity.tk?lat=37.762422&lng=-122.419380&zoom=16&markers=%5B%7B%22coordinates%22%3A%20%5B-122.419380%2C%2037.762422%5D%2C%22img%22%3A%20%22favicon.png%22%7D%5D" target="_blank" > 37.762422, -122.419380</a>
+          <br> <br>
+          A hackerspace of your dreams, fully stocked with an electronics lab, wood shop,
+          craft supplies, libNoiseBridge, and creative collaboration. This space is constantly
+          evolving due to its doocratic philosophy, and will definitely feul your inner
           creative hacker. <br> <br> API\'s and IPA\'s flourish here.`,
-				  `BUCHANAN ST 
-          <br> 
-          <a href="http://subcity.tk?lat=37.770675&lng=-122.426804&zoom=16&markers=%5B%7B%22coordinates%22%3A%20%5B-122.426804%2C%2037.770675%5D%2C%22img%22%3A%20%22favicon.png%22%7D%5D" target="_blank"> 37.770675, -122.426804</a> <br> <br>  
+				  `BUCHANAN ST
+          <br>
+          <a href="http://subcity.tk?lat=37.770675&lng=-122.426804&zoom=16&markers=%5B%7B%22coordinates%22%3A%20%5B-122.426804%2C%2037.770675%5D%2C%22img%22%3A%20%22favicon.png%22%7D%5D" target="_blank"> 37.770675, -122.426804</a> <br> <br>
           I want to lay down here, right in the middle but a little under the metallic surface, and just watch the cars fly over me. `,
-				  `SHIPYARD 
-          <br> <a href="http://subcity.tk?lat=37.724567&lng=-122.367422&zoom=16&markers=%5B%7B%22coordinates%22%3A%20%5B-122.367422%2C%2037.724567%5D%2C%22img%22%3A%20%22favicon.png%22%7D%5D" target="_blank"> 37.724567, -122.367422</a> 
-          <br> <br>  
-          All this land has been forgotten. These are abandoned US Navy factories that 
-          used to be booming with the construction of navy ships during World War II. However, 
-          today all that is remaining is a desolate concrete jungle with "danger no entry" or 
-          "danger hazardous material" signs everywhere you turn. <br><br> Are there really? 
-          <br> <br> We were kicked out shortly after this photo was taken, apparently there 
+				  `SHIPYARD
+          <br> <a href="http://subcity.tk?lat=37.724567&lng=-122.367422&zoom=16&markers=%5B%7B%22coordinates%22%3A%20%5B-122.367422%2C%2037.724567%5D%2C%22img%22%3A%20%22favicon.png%22%7D%5D" target="_blank"> 37.724567, -122.367422</a>
+          <br> <br>
+          All this land has been forgotten. These are abandoned US Navy factories that
+          used to be booming with the construction of navy ships during World War II. However,
+          today all that is remaining is a desolate concrete jungle with "danger no entry" or
+          "danger hazardous material" signs everywhere you turn. <br><br> Are there really?
+          <br> <br> We were kicked out shortly after this photo was taken, apparently there
           are reminent radioactive materials here, and children are not allowed.`,
-				  `DUBOCE 
-          <br> <a href="http://duboceengineering.com/" target="_blank"> N/A</a> 
-          <br> <br>  
-          This is my humble abode. There are 6 of us living here + a miscellaneous number 
-          of french visitors. A typical day at Duboce may consist of lockpicking, hacking 
-          the world, existential dark-room music sessions, tea, and keith-parties. <br> <br> 
-          Please visit anytime and follow the signs to take your shoes off at the door. <br> <br> 
+				  `DUBOCE
+          <br> <a href="http://duboceengineering.com/" target="_blank"> N/A</a>
+          <br> <br>
+          This is my humble abode. There are 6 of us living here + a miscellaneous number
+          of french visitors. A typical day at Duboce may consist of lockpicking, hacking
+          the world, existential dark-room music sessions, tea, and keith-parties. <br> <br>
+          Please visit anytime and follow the signs to take your shoes off at the door. <br> <br>
           FYI: Showers may or may not work and there is a family living in the bike storage room. `
         ]
 				numSpheres = imageArray.length;
@@ -137,7 +152,7 @@
 				}
 
 				//set the first sphere mesh
-				currentSphere = sphereArray[0];
+				currentSphere = sphereArray[index];
 				scene.add(currentSphere);
 
 
@@ -223,6 +238,7 @@
 				}
 				if (index == 0) backButton.style.display = 'none';
 				else backButton.style.display = 'inline'
+				history.replaceState({},"page", "?page=" + `${index}`);
 			}
 
 			function prevIndex() {
@@ -230,6 +246,7 @@
 				if (index ==0 ) backButton.style.display = 'none'; // cant go back anymore!
 				cameraController.state = 5;
 				cameraController.destination = 300*index;
+				history.replaceState({},"page", "?page=" + `${index}`);
 			}
 
 			//camera controller class that handles switching between spheres, and zooming in/out of spehres
