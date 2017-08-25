@@ -4,7 +4,7 @@
   "description": "Coder cat main web site",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "deploy": "scripts/deploy.sh"
   },
   "author": "Kirill Kovalevskiy",
   "license": "ISC",
