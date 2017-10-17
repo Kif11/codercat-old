@@ -1,0 +1,3 @@
+[submodule "repos/vertex-texture-cache"]
+	path = repos/vertex-texture-cache
+	url = https://github.com/sneha-belkhale/vertex-texture-cache
